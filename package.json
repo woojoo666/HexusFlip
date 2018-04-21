@@ -10,5 +10,8 @@
     "hexus"
   ],
   "author": "Max Woo (maxithewoowoo@gmail.com)",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "opencv4nodejs": "^4.2.1",
+  }
 }
