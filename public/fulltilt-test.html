@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<title>Hexus Trainer</title>
+
+<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+<style>
+* {
+	margin:0;
+	padding:0;
+}
+img {
+	width: 300px;
+	height: auto;
+}
+</style>
+<script type="text/javascript" src="cartesia-v0.1.2/cartesia.min.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+</head>
+
+<body>
+Comparison between the blanket taken at a certain roll/pitch/yaw, and then simulating that roll/pitch/yaw in WebGL
+<canvas id="gl-canvas" width="300" height="400">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+<img src="alpha_0.525 beta_16.124 gamma_-13.307.jpg"/>
+<div id="generated">
+</div>
+<script>
+
+var glwrapper;
+var mCamera;
+var root = new SimpleCartesia();
+var mfloor;
+
+window.onload = function init()
+{
+	// Initialize and Configure WebGL
+
+	// enable WebGL canvas screenshotting (using canvas.toDataUrl())
+	$('#gl-canvas')[0].getContext("experimental-webgl", {preserveDrawingBuffer: true});
+	glwrapper = new WebGLWrapper( "gl-canvas", TextureShader );
+
+	// hardcoded skew values
+	var alpha = 0.5259472008058409;
+	var beta = 16.12427933099772;
+	var gamma = -13.307355484480873;
+
+	var cameraOffset = new SimpleCartesia().setParent(root).move(vec3(-0.4,-0.6,1.8));
+	//start with camera moved back 20 and up 10
+	var cameraABG = new CustomCartesia().setParent(cameraOffset).setTransform(
+		new Mat4()
+			.rotate(gamma, vec3(0,1,0)) // gamma = yaw
+			.rotate(beta, vec3(1,0,0)) // beta == pitch
+			.rotate(alpha, vec3(0,0,1))); // alpha == roll
+	// note: although the order of transformations is alpha,beta,gamma, transformations on the right are applied first, so we have to reverse the order to gamma,beta,alpha
+	var mCamera = new Camera().setParent(cameraABG);
+
+	var image1 = new Image();
+	image1.onload = function() { 
+		var texture = glwrapper.createTexture( image1 , gl.NEAREST, gl.NEAREST, gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE );
+		console.log(image1.naturalHeight*1.0/image1.naturalWidth);
+		floorRect = new CustomCartesia().setParent(root).setTransform(new Mat4().scale(vec3(-1, image1.naturalHeight*1.0/image1.naturalWidth),1));
+		mfloor = new TextureSquare(texture).setParent(floorRect);
+	};
+	image1.src = "straw-hats.jpg";
+
+	glwrapper.useScene(root);
+	glwrapper.useCamera(mCamera);
+
+	var counter = 0;
+	var COUNT_MAX = 5;
+	var pictures = 0;
+	var MAX_PICTURES = 20;
+
+	glwrapper.beforeRender = function () {
+	};
+
+	glwrapper.start();
+};
+
+</script>
+</body>
+
+</html>
