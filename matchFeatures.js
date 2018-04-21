@@ -27,8 +27,8 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('s0.jpg');
-const img2 = cv.imread('s1.jpg');
+const img1 = cv.imread('public/alpha_0.525 beta_16.124 gamma_-13.307 - flipped.jpg');
+const img2 = cv.imread('public/straw-hats.jpg');
 
 // check if opencv compiled with extra modules and nonfree
 if (cv.xmodules.xfeatures2d) {
