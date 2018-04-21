@@ -18,6 +18,17 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
     (match1, match2) => match1.distance - match2.distance
   ).slice(0, bestN);
 
+  // note: I believe the first descriptor is the "query image" and second is the "train image"
+  matchedPoints1 = [];
+  matchedPoints2 = [];
+  for( let i = 0; i < bestMatches.length; i++ ){
+    //-- Get the keypoints from the good matches
+    matchedPoints1.push( keyPoints1[ bestMatches[i].queryIdx ].point );
+    matchedPoints2.push( keyPoints2[ bestMatches[i].trainIdx ].point );
+  }
+
+  console.log(cv.findHomography(matchedPoints1, matchedPoints2));
+
   return cv.drawMatches(
     img1,
     img2,
