@@ -1,4 +1,4 @@
-const cv = require('../');
+const cv = require('opencv4nodejs');
 
 const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   // detect keypoints
@@ -27,8 +27,8 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('../data/s0.jpg');
-const img2 = cv.imread('../data/s1.jpg');
+const img1 = cv.imread('s0.jpg');
+const img2 = cv.imread('s1.jpg');
 
 // check if opencv compiled with extra modules and nonfree
 if (cv.xmodules.xfeatures2d) {
