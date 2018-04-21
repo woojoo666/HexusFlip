@@ -1,4 +1,7 @@
 const cv = require('opencv4nodejs');
+const fs = require('fs');
+
+const matchRatio = 0.6; // for David Lowe's ratio test
 
 const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   // detect keypoints
@@ -10,13 +13,21 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   const descriptors2 = detector.compute(img2, keyPoints2);
 
   // match the feature descriptors
-  const matches = matchFunc(descriptors1, descriptors2);
+  const matches = matchFunc(descriptors1, descriptors2, 2);
 
+  // David Lowe ratio test
+  var bestMatches = [];
+  for (var i = 0; i < matches.length; i++) {
+    m = matches[i];
+    if (m.length == 2 && m[0].distance < m[1].distance * matchRatio) {
+      bestMatches.push(m[0])
+    }
+  }
   // only keep good matches
-  const bestN = 40;
-  const bestMatches = matches.sort(
-    (match1, match2) => match1.distance - match2.distance
-  ).slice(0, bestN);
+  // const bestN = 40;
+  // const bestMatches = matches.sort(
+  //   (match1, match2) => match1.distance - match2.distance
+  // ).slice(0, bestN);
 
   return cv.drawMatches(
     img1,
@@ -47,7 +58,7 @@ const orbMatchesImg = matchFeatures({
   img1,
   img2,
   detector: new cv.ORBDetector(),
-  matchFunc: cv.matchBruteForceHamming
+  matchFunc: cv.matchKnnBruteForce
 });
 cv.imshowWait('ORB matches', orbMatchesImg);
 
