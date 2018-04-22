@@ -32,6 +32,8 @@ app.get('/visualizer', (req, res) => {
 const index_namespace = '/index';
 const visualizer_namespace = '/visualizer';
 
+const spells_namespace = '/spells';
+
 io.of(index_namespace).on('connection', function (socket) {
 	console.log('index connected!!!');
 	socket.on('cameraDevices', function (data) {
@@ -50,6 +52,10 @@ io.of(visualizer_namespace).on('connection', function (socket) {
 	socket.on('visualizer-ready', function () {
 		io.of(index_namespace).emit('takeCapture');
 	});
-})
+});
+
+io.of(spells_namespace).on('connection', function (socket) {
+	console.log('soundcloud connected!!!');
+});
 
 server.listen(443, '0.0.0.0')
