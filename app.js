@@ -49,6 +49,7 @@ io.of(index_namespace).on('connection', function (socket) {
 		io.of(visualizer_namespace).emit('cameraPose', { cameraPose, activeTotem });
 	});
 	socket.on('initiateCommand', function (data) {
+		console.log(data);
 		io.of(spells_namespace).emit('command', data);
 	});
 });
