@@ -16,6 +16,8 @@ const perspectiveTransform = (homography, points2d) => {
   return out;
 }
 
+var homographyMatrix;
+
 const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   // detect keypoints
   const keyPoints1 = detector.detect(img1);
@@ -58,8 +60,8 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   }
   //print homography matrix
   console.log("["+mat.map(r => "["+r.join(",")+"]").join(",\n")+"]");
+  homographyMatrix = mat;
 
-  console.log(perspectiveTransform(mat, [[0,0]]));
   // const srcCorners = new cv.Mat([
   //     [0, 0],
   //     [img1.cols, 0],
@@ -100,5 +102,22 @@ const orbMatchesImg = matchFeatures({
   detector: new cv.ORBDetector(),
   matchFunc: cv.matchBruteForceHamming
 });
+
+const srcCorners = [
+    [0, 0],
+    [img1.cols, 0],
+    [img1.cols, img1.rows],
+    [0, img1.rows]
+  ];
+const dstCoords = perspectiveTransform(homographyMatrix, srcCorners);
+const xOffset = img1.cols; // because the query image is on the left side, drawings on the right side need to be offset
+const dstPoints = dstCoords.map(coord => new cv.Point(coord[0]+xOffset, coord[1]));
+const yellow = new cv.Vec(0,255,255);
+
+orbMatchesImg.drawLine(dstPoints[0], dstPoints[1], yellow);
+orbMatchesImg.drawLine(dstPoints[1], dstPoints[2], yellow);
+orbMatchesImg.drawLine(dstPoints[2], dstPoints[3], yellow);
+orbMatchesImg.drawLine(dstPoints[3], dstPoints[0], yellow);
+
 cv.imshowWait('ORB matches', orbMatchesImg);
 
