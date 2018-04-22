@@ -30,6 +30,7 @@ script.
 	socket.on('cameraPose', function (cameraPose) {
 		console.log('cameraPose: [' + cameraPose.x + ', ' + cameraPose.y + ']');
 		redraw(cameraPose.x, cameraPose.y);
+		setTimeout(() => socket.emit('visualizer-ready'), 200);
 	});
 
 	redraw(0, 0);
