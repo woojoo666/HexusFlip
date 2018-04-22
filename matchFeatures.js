@@ -31,7 +31,7 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   const matches = matchFunc(descriptors1, descriptors2);
 
   // only keep good matches
-  const bestN = 12;
+  const bestN = 120;
   const bestMatches = matches.sort(
     (match1, match2) => match1.distance - match2.distance
   ).slice(0, bestN);
@@ -80,8 +80,8 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('public/camera-pose-estimation/0 0 2 agb 30 0 0.png');
-const img2 = cv.imread('public/straw-hats.jpg');
+const img1 = cv.imread('shoppingbag.jpg');
+const img2 = cv.imread('capture.jpg');
 
 // check if opencv compiled with extra modules and nonfree
 if (cv.xmodules.xfeatures2d) {
@@ -112,12 +112,12 @@ const srcCorners = [
 const dstCoords = perspectiveTransform(homographyMatrix, srcCorners);
 const xOffset = img1.cols; // because the query image is on the left side, drawings on the right side need to be offset
 const dstPoints = dstCoords.map(coord => new cv.Point(coord[0]+xOffset, coord[1]));
-const yellow = new cv.Vec(0,255,255);
+const lineprops = { thickness: 5, color: new cv.Vec(0,255,255) };
 
-orbMatchesImg.drawLine(dstPoints[0], dstPoints[1], yellow);
-orbMatchesImg.drawLine(dstPoints[1], dstPoints[2], yellow);
-orbMatchesImg.drawLine(dstPoints[2], dstPoints[3], yellow);
-orbMatchesImg.drawLine(dstPoints[3], dstPoints[0], yellow);
+orbMatchesImg.drawLine(dstPoints[0], dstPoints[1], lineprops);
+orbMatchesImg.drawLine(dstPoints[1], dstPoints[2], lineprops);
+orbMatchesImg.drawLine(dstPoints[2], dstPoints[3], lineprops);
+orbMatchesImg.drawLine(dstPoints[3], dstPoints[0], lineprops);
 
 const srcCenter = [img1.cols/2, img1.rows/2];
 const dstCenter = perspectiveTransform(homographyMatrix, [srcCenter])[0];
@@ -132,5 +132,5 @@ const cameraMat = new cv.Mat([
   ], cv.CV_32F);
 console.log(cv.solvePnP(points3d, points2d, cameraMat, []));
 
-cv.imshowWait('ORB matches', orbMatchesImg);
+cv.imwrite('ORBmatches.png', orbMatchesImg);
 
