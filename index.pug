@@ -1,0 +1,29 @@
+video(id='player' controls autoplay)
+button(onclick='switchCamera()') switch camera
+script.
+	const player = document.getElementById('player');
+
+	let switchCamera; // function for switching camera
+
+	navigator.mediaDevices.enumerateDevices().then(function (devices) {
+		cameraDevices = devices.filter(device => device.kind == 'videoinput');
+
+		let deviceIndex = 0;
+		let videoSource = cameraDevices[deviceIndex].deviceId;
+
+		switchCamera = function () {
+			deviceIndex = (deviceIndex+1) % cameraDevices.length;
+			videoSource = cameraDevices[deviceIndex].deviceId;
+			startStream();
+		}
+
+		function startStream () {
+			console.log(cameraDevices[deviceIndex].deviceId);
+			navigator.mediaDevices.getUserMedia({ video: {deviceId: {exact: videoSource} } })
+				.then((stream) => {
+					player.srcObject = stream;
+				});
+		}
+
+		startStream();
+	});
