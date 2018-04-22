@@ -32,7 +32,7 @@ script.
 				})
 				.then(() => {
 					imageCapture = new ImageCapture(track);
-					capture = () => imageCapture.takePhoto().then(blob => socket.emit('capture', blob));
+					capture = () => imageCapture.takePhoto({imageWidth: 1200, imageHeight: 1200}).then(blob => socket.emit('capture', blob));
 
 					return imageCapture.getPhotoCapabilities();
 				})

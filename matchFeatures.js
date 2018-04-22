@@ -80,7 +80,7 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('public/camera-pose-estimate resized/capture4.jpg');
+const img1 = cv.imread('public/camera-pose-estimate client-resized/capture2.jpg');
 const img2 = cv.imread('shoppingbag-resized.jpg');
 
 // check if opencv compiled with extra modules and nonfree
@@ -141,5 +141,5 @@ const cameraMat = new cv.Mat([
   ], cv.CV_32F);
 console.log(cv.solvePnP(points3d, points2d, cameraMat, []));
 
-cv.imwrite('public/camera-pose-estimate resized/matches4.png', orbMatchesImg);
+cv.imwrite('public/camera-pose-estimate client-resized/matches2.png', orbMatchesImg);
 
