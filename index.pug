@@ -1,5 +1,6 @@
 video(id='player' controls autoplay)
 img(id='capturedImg')
+button(onclick='capture();') take photo
 script(src="/socket.io/socket.io.js")
 script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js")
 script(src="https://code.jquery.com/jquery-3.1.1.min.js")
@@ -8,6 +9,8 @@ script.
 
 	// use "window.location.href" so it doesn't matter if you use localhost or the ip address to access the server
 	var socket = io.connect(window.location.href, {secure: true});
+
+	function capture () {};
 
 	navigator.mediaDevices.enumerateDevices().then(function (devices) {
 		var cameraDevices = devices.filter(device => device.kind == 'videoinput');
@@ -22,7 +25,7 @@ script.
 					player.srcObject = stream;
 					var track = stream.getVideoTracks()[0];
 					var imageCapture = new ImageCapture(track);
-					imageCapture.takePhoto().then(blob => $('#capturedImg')[0].src = URL.createObjectURL(blob));
+					capture = () => imageCapture.takePhoto().then(blob => $('#capturedImg')[0].src = URL.createObjectURL(blob));
 				});
 		}
 
