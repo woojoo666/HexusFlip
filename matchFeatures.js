@@ -31,14 +31,26 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
 
   console.log(homography);
 
-  const srcCorners = new cv.Mat([
-      [0, 0],
-      [img1.cols, 0],
-      [img1.cols, img1.rows],
-      [0, img1.rows]
-    ], cv.CV_32F);
-  const dstCoordinates = srcCorners.perspectiveTransform(homography)
-  console.log(dstCoordinates);
+  // convert homography matrix to a js matrix
+  var mat = [];
+  for (var r = 0; r < homography.rows; r++) {
+    var row = [];
+    for (var c = 0; c < homography.cols; c++) {
+      row.push(homography.at(r,c));
+    }
+    mat.push(row);
+  }
+  //print homography matrix
+  console.log("["+mat.map(r => "["+r.join(",")+"]").join(",\n")+"]");
+
+  // const srcCorners = new cv.Mat([
+  //     [0, 0],
+  //     [img1.cols, 0],
+  //     [img1.cols, img1.rows],
+  //     [0, img1.rows]
+  //   ], cv.CV_32F);
+  //const dstCoordinates = srcCorners.perspectiveTransform(homography)
+  //console.log(dstCoordinates);
 
   return cv.drawMatches(
     img1,
@@ -49,7 +61,7 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('public/alpha_0.525 beta_16.124 gamma_-13.307 - flipped.jpg');
+const img1 = cv.imread('public/straw-hats-cropped.jpg');
 const img2 = cv.imread('public/straw-hats.jpg');
 
 // check if opencv compiled with extra modules and nonfree
