@@ -1,7 +1,6 @@
 var totems = [
 	{ target: 'soundcloud', x: 150, y:  150},
 	{ target: 'youtube', x: 150, y: 250 },
-	{ target: 'light', x: 250, y: 300 },
 	{ target: 'alarm', x: 300, y: 200 },
 	{ target: 'presentation', x: 250, y: 100 },
 ];
