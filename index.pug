@@ -8,28 +8,48 @@ style.
 		top: 0;
 		left: 0;
 		z-index: 100;
+		width: 100%;
+		height: 100%;
+		background-color: #666;
+	}
+
+	.moveButton {
+		font-size: 50;
+	}
+
+	.moveOverlay {
+		display: block;
+		z-index: 200;
 	}
 
 video(id='player' controls autoplay)
+.remoteOverlay.moveOverlay
+	h1 Moving
+	button(onclick='finishMove();') Set Position
 .remoteOverlay.soundcloud
 	h1 Soundcloud
 	button(onclick='sendCommand("soundcloud", "play/pause");') play/pause
 	button(onclick='sendCommand("soundcloud", "next");') next
 	button(onclick='sendCommand("soundcloud", "prev");') prev
+	button.moveButton(onclick='move()') Move Totem
 .remoteOverlay.youtube
 	h1 Youtube
 	button(onclick='sendCommand("youtube", "play/pause");') play/pause
+	button.moveButton(onclick='move()') Move Totem
 .remoteOverlay.alarm
 	h1 Alarm
 	input(id="alarmInput" type="time")
 	button(onclick='sendCommand("alarm", "setAlarm:" + $("#alarmInput").val() )') set alarm
+	button.moveButton(onclick='move()') Move Totem
 .remoteOverlay.presentation
 	h1 Presentation
 	button(onclick='sendCommand("presentation", "next");') next
 	button(onclick='sendCommand("presentation", "prev");') prev
+	button.moveButton(onclick='move()') Move Totem
 .remoteOverlay.light
 	h1 Light
 	button(onclick='sendCommand("light", "on/off");') on/off
+	button.moveButton(onclick='move()') Move Totem
 script(src="/socket.io/socket.io.js")
 script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js")
 script(src="https://code.jquery.com/jquery-3.1.1.min.js")
@@ -47,13 +67,36 @@ script.
 		socket.emit('initiateCommand', { target, command });
 	}
 
+	var activeTotem = null;
+	var moving = null; // the totem we are moving
+
 	socket.on('activeTotem', (totem) => {
 		$('.remoteOverlay').hide();
+		activeTotem = null;
+
+		if (moving) {
+			$('.moveOverlay').show();
+			return; // don't show any overlays if we are moving a totem
+		}
 
 		if (totem && totem.target) {
+			activeTotem = totem;
 			$('.remoteOverlay.'+totem.target).show();
 		}
 	});
+
+	function move() {
+		moving = activeTotem;
+		$('.moveOverlay').show();
+	}
+
+	function finishMove() {
+		socket.emit('movedTotem', moving);
+		moving = null;
+		$('.moveOverlay').hide();
+	}
+
+	$('.moveOverlay').hide(); // start hidden
 
 	navigator.mediaDevices.enumerateDevices().then(function (devices) {
 		var cameraDevices = devices.filter(device => device.kind == 'videoinput');

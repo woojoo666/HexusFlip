@@ -35,6 +35,8 @@ const visualizer_namespace = '/visualizer';
 
 const spells_namespace = '/spells';
 
+var lastPosition; // used for moving totems
+
 io.of(index_namespace).on('connection', function (socket) {
 	console.log('index connected!!!');
 	socket.on('cameraDevices', function (data) {
@@ -43,7 +45,8 @@ io.of(index_namespace).on('connection', function (socket) {
 	socket.on('captured', function (blob) {
 		fs.writeFileSync('image.jpg', new Buffer(blob, 'base64'));
 		var cameraPose = vision.estimateCameraPose('image.jpg');
-		console.log(cameraPose);
+		//console.log(cameraPose);
+		lastPosition = cameraPose.center;
 		var activeTotem = totems.getActiveTotem(cameraPose);
 		socket.emit('activeTotem', activeTotem);
 		io.of(visualizer_namespace).emit('cameraPose', { cameraPose, activeTotem });
@@ -52,6 +55,13 @@ io.of(index_namespace).on('connection', function (socket) {
 		console.log(data);
 		io.of(spells_namespace).emit('command', data);
 	});
+	socket.on('movedTotem', function (moved) {
+		totem = totems.totems.filter(t => t.target == moved.target)[0];
+		totem.x = lastPosition.x;
+		totem.y = lastPosition.y;
+		console.log("moved " + totem.target + " to " + totem.x + ", " + totem.y);
+		io.of(visualizer_namespace).emit('totems', totems.totems);
+	})
 });
 
 io.of(visualizer_namespace).on('connection', function (socket) {
