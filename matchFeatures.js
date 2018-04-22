@@ -80,8 +80,8 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('s1.jpg');
-const img2 = cv.imread('s0.jpg');
+const img1 = cv.imread('public/straw-hats-cropped.jpg');
+const img2 = cv.imread('public/straw-hats.jpg');
 
 // check if opencv compiled with extra modules and nonfree
 if (cv.xmodules.xfeatures2d) {
@@ -118,6 +118,19 @@ orbMatchesImg.drawLine(dstPoints[0], dstPoints[1], yellow);
 orbMatchesImg.drawLine(dstPoints[1], dstPoints[2], yellow);
 orbMatchesImg.drawLine(dstPoints[2], dstPoints[3], yellow);
 orbMatchesImg.drawLine(dstPoints[3], dstPoints[0], yellow);
+
+const srcCenter = [img1.cols/2, img1.rows/2];
+const dstCenter = perspectiveTransform(homographyMatrix, [srcCenter])[0];
+
+const points3d = [srcCenter, ...srcCorners].map(p => new cv.Point(p[0], p[1], 1));
+const points2d = [dstCenter, ...dstCoords].map(p => new cv.Point(p[0], p[1]));
+
+const cameraMat = new cv.Mat([
+  [img1.cols, 0, img1.cols/2],
+  [0, img1.cols, img1.rows/2],
+  [0, 0, 1]
+  ], cv.CV_32F);
+console.log(cv.solvePnP(points3d, points2d, cameraMat, []));
 
 cv.imshowWait('ORB matches', orbMatchesImg);
 
