@@ -1,5 +1,6 @@
 video(id='player' controls autoplay)
 button(onclick='switchCamera()') switch camera
+script(src="/socket.io/socket.io.js")
 script.
 	const player = document.getElementById('player');
 
@@ -26,4 +27,10 @@ script.
 		}
 
 		startStream();
+	});
+
+	var socket = io.connect('https://localhost', {secure: true});
+	socket.on('news', function (data) {
+		console.log(data);
+		socket.emit('my other event', { my: 'data' });
 	});

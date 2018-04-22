@@ -12,14 +12,15 @@
   "author": "Max Woo (maxithewoowoo@gmail.com)",
   "license": "ISC",
   "dependencies": {
-    "opencv4nodejs": "^4.2.1",
     "body-parser": "^1.15.2",
     "bower": "^1.8.0",
     "express": "^4.14.0",
     "glob": "^7.1.1",
     "morgan": "^1.7.0",
+    "opencv4nodejs": "^4.2.1",
     "path": "^0.12.7",
     "pug": "^2.0.0-beta6",
-    "self-signed-https": "^1.0.5"
+    "self-signed-https": "^1.0.5",
+    "socket.io": "^2.1.0"
   }
 }
