@@ -31,7 +31,7 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   const matches = matchFunc(descriptors1, descriptors2);
 
   // only keep good matches
-  const bestN = 80;
+  const bestN = 40;
   const bestMatches = matches.sort(
     (match1, match2) => match1.distance - match2.distance
   ).slice(0, bestN);
@@ -80,8 +80,8 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('public/camera-pose-estimate/capture4.jpg');
-const img2 = cv.imread('shoppingbag.jpg');
+const img1 = cv.imread('public/camera-pose-estimate resized/capture4.jpg');
+const img2 = cv.imread('shoppingbag-resized.jpg');
 
 // check if opencv compiled with extra modules and nonfree
 if (cv.xmodules.xfeatures2d) {
@@ -112,7 +112,7 @@ const srcCorners = [
 const dstCoords = perspectiveTransform(homographyMatrix, srcCorners);
 const xOffset = img1.cols; // because the query image is on the left side, drawings on the right side need to be offset
 const dstPoints = dstCoords.map(coord => new cv.Point(coord[0]+xOffset, coord[1]));
-const borderLine = { thickness: 5, color: new cv.Vec(0,255,255) };
+const borderLine = { thickness: 2, color: new cv.Vec(0,255,255) };
 
 orbMatchesImg.drawLine(dstPoints[0], dstPoints[1], borderLine);
 orbMatchesImg.drawLine(dstPoints[1], dstPoints[2], borderLine);
@@ -121,7 +121,7 @@ orbMatchesImg.drawLine(dstPoints[3], dstPoints[0], borderLine);
 
 const srcCenter = [img1.cols/2, img1.rows/2];
 const dstCenter = perspectiveTransform(homographyMatrix, [srcCenter])[0];
-const centerLine = { thickness: 10, color: new cv.Vec(255,255,0) };
+const centerLine = { thickness: 5, color: new cv.Vec(255,255,0) };
 
 //draw vector from origin towards border center, which is the camera pose estimate (assuming no tilt)
 orbMatchesImg.drawLine(new cv.Point(img2.cols/2+xOffset, img2.rows/2),
@@ -141,5 +141,5 @@ const cameraMat = new cv.Mat([
   ], cv.CV_32F);
 console.log(cv.solvePnP(points3d, points2d, cameraMat, []));
 
-cv.imwrite('public/camera-pose-estimate/matches4.png', orbMatchesImg);
+cv.imwrite('public/camera-pose-estimate resized/matches4.png', orbMatchesImg);
 
