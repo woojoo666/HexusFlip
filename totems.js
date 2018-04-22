@@ -7,7 +7,7 @@ var totems = [
 ];
 
 function subtract(v1, v2) {
-	return { x: p1.x - p2.x,   y: p1.y - p2.y };
+	return { x: v1.x - v2.x,   y: v1.y - v2.y };
 }
 
 function length(v) {

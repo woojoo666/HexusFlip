@@ -13,6 +13,8 @@ script.
 
 	var totems = [];
 
+	var activeTotem = null;
+
 	function redraw(cameraPose) {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -37,12 +39,17 @@ script.
 		ctx.stroke();
 
 		totems.forEach((totem) => {
-			ctx.fillStyle = "green";
+			if (activeTotem && totem.x == activeTotem.x && totem.y == activeTotem.y)
+				ctx.fillStyle = "blue";
+			else
+				ctx.fillStyle = "green";
 			ctx.fillRect(...point(totem.x, totem.y), 5, 5);
 		});
 	}
 
-	socket.on('cameraPose', function (cameraPose) {
+	socket.on('cameraPose', function (data) {
+		var cameraPose = data.cameraPose;
+		activeTotem = data.activeTotem;
 		console.log('cameraPose: [' + cameraPose.center.x + ', ' + cameraPose.center.y + ']');
 		redraw(cameraPose);
 		setTimeout(() => socket.emit('visualizer-ready'), 200);

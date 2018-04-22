@@ -44,7 +44,8 @@ io.of(index_namespace).on('connection', function (socket) {
 		fs.writeFileSync('image.jpg', new Buffer(blob, 'base64'));
 		var cameraPose = vision.estimateCameraPose('image.jpg');
 		console.log(cameraPose);
-		io.of(visualizer_namespace).emit('cameraPose', cameraPose);
+		var activeTotem = totems.getActiveTotem(cameraPose);
+		io.of(visualizer_namespace).emit('cameraPose', { cameraPose, activeTotem });
 	});
 	socket.on('initiateCommand', function (data) {
 		io.of(spells_namespace).emit('command', data);
