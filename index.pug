@@ -3,12 +3,15 @@ button(onclick='capture();') take photo
 script(src="/socket.io/socket.io.js")
 script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js")
 script(src="https://code.jquery.com/jquery-3.1.1.min.js")
+canvas(id="canvas" width="768" height="1024")
 script.
 	const player = document.getElementById('player');
 
 	const socket_namespace = '/index';
 
 	var socket = io.connect(socket_namespace, {secure: true});
+
+	var canvas = document.getElementById('canvas');
 
 	function capture () {};
 
@@ -20,7 +23,11 @@ script.
 		socket.emit('cameraDevices', backCamera);
 
 		const constraints = {
+			width: 1024,
+			height: 768,
 		};
+
+		var  dataUrlToBlob = dataUrl => dataUrl.split(',')[1];
 
 		function startStream () {
 			var track;
@@ -35,7 +42,10 @@ script.
 					imageCapture = new ImageCapture(track);
 					socket.on('takeCapture', function () {
 						console.log('takeCapture');
-						imageCapture.takePhoto({imageWidth: 1200, imageHeight: 1200}).then(blob => socket.emit('captured', blob));
+						imageCapture.grabFrame().then(bitmap => {
+							canvas.getContext('2d').drawImage(bitmap, 0, 0);
+							socket.emit('captured', dataUrlToBlob(canvas.toDataURL('image/jpeg')));
+						});
 					});
 
 					return imageCapture.getPhotoCapabilities();
