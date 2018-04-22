@@ -1,5 +1,5 @@
 script(src="/socket.io/socket.io.js")
-canvas(id="canvas" width="1000" height="1000")
+canvas(id="canvas" width="800" height="800")
 script.
 	const canvas = document.getElementById("canvas");
 	const ctx = canvas.getContext("2d");
@@ -8,8 +8,8 @@ script.
 
 	var socket = io.connect(socket_namespace, {secure: true});
 
-	const center = { x: canvas.width/2, y: canvas.height/2 }
-	var point = (x, y) => [ x+center.x, y+center.y ];
+	const offset = { x: 300, y:300 }
+	var point = (x, y) => [ x+offset.x, y+offset.y ];
 
 	var totems = [];
 
@@ -17,7 +17,7 @@ script.
 
 	function redraw(cameraPose) {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+		/*
 		// draw origin
 		ctx.beginPath(); 
 		ctx.strokeStyle = "black";
@@ -27,10 +27,10 @@ script.
 		ctx.moveTo(...point(0, -20));
 		ctx.lineTo(...point(0, 20));
 		ctx.stroke();
-
+		*/
 		// draw camera pose
 		ctx.fillStyle = "red";
-		ctx.fillRect(...point(cameraPose.center.x, cameraPose.center.y), 10, 10);
+		ctx.fillRect(...point(cameraPose.center.x, cameraPose.center.y), 20, 20);
 
 		ctx.beginPath(); 
 		ctx.strokeStyle = "red";
@@ -43,7 +43,7 @@ script.
 				ctx.fillStyle = "blue";
 			else
 				ctx.fillStyle = "green";
-			ctx.fillRect(...point(totem.x, totem.y), 5, 5);
+			ctx.fillRect(...point(totem.x, totem.y), 15, 15);
 		});
 	}
 

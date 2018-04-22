@@ -71,12 +71,6 @@ video(id='player' controls autoplay)
 	input(id="alarmInput" type="time")
 	button(onclick='sendCommand("alarm", "setAlarm:" + $("#alarmInput").val() )') set alarm
 	button.moveButton(onclick='move()') Move Totem
-.remoteOverlay.presentation
-	h1 Presentation
-	.controlbar
-		button(onclick='sendCommand("presentation", "prev");') ◀◀
-		button(onclick='sendCommand("presentation", "next");') ▶▶
-	button.moveButton(onclick='move()') Move Totem
 script(src="/socket.io/socket.io.js")
 script(src="https://code.jquery.com/jquery-3.1.1.min.js")
 canvas(id="canvas" width="768" height="1024")
