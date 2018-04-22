@@ -11,10 +11,12 @@ script.
 	const center = { x: canvas.width/2, y: canvas.height/2 }
 	var point = (x, y) => [ x+center.x, y+center.y ];
 
-	function redraw(x, y) {
+	function redraw(cameraPose) {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		// draw origin
+		ctx.beginPath(); 
+		ctx.strokeStyle = "black";
 		ctx.moveTo(...point(-20, 0));
 		ctx.lineTo(...point(20, 0));
 		ctx.stroke();
@@ -23,16 +25,20 @@ script.
 		ctx.stroke();
 
 		// draw camera pose
-		ctx.fillStyle = "#FF0000";
-		ctx.fillRect(...point(x, y), 10, 10);
+		ctx.fillStyle = "red";
+		ctx.fillRect(...point(cameraPose.center.x, cameraPose.center.y), 10, 10);
+
+		ctx.beginPath(); 
+		ctx.strokeStyle = "red";
+		ctx.moveTo(...point(cameraPose.center.x, cameraPose.center.y));
+		ctx.lineTo(...point(cameraPose.north.x, cameraPose.north.y));
+		ctx.stroke();
 	}
 
 	socket.on('cameraPose', function (cameraPose) {
-		console.log('cameraPose: [' + cameraPose.x + ', ' + cameraPose.y + ']');
-		redraw(cameraPose.x, cameraPose.y);
+		console.log('cameraPose: [' + cameraPose.center.x + ', ' + cameraPose.center.y + ']');
+		redraw(cameraPose);
 		setTimeout(() => socket.emit('visualizer-ready'), 200);
 	});
-
-	redraw(0, 0);
 
 	socket.emit('visualizer-ready');

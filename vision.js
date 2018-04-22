@@ -68,6 +68,9 @@ const estimateCameraPose = ( img1url, draw ) => {
 	const srcCenter = [img1.cols/2, img1.rows/2];
 	const dstCenter = perspectiveTransform(homographyMatrix, [srcCenter])[0];
 
+	const srcNorth = [img1.cols/2, 0];
+	const dstNorth = perspectiveTransform(homographyMatrix, [srcNorth])[0];
+
 	if (draw) {
 		drawMatches(
 			img1,
@@ -79,7 +82,7 @@ const estimateCameraPose = ( img1url, draw ) => {
 		);
 	}
 
-	return { x: dstCenter[0], y: dstCenter[1] };
+	return { center: { x: dstCenter[0], y: dstCenter[1] }, north: { x : dstNorth[0], y: dstNorth[1] } };
 };
 
 const drawMatches = function (img1, img2, keyPoints1, keyPoints2, bestMatches, homographyMatrix) {
