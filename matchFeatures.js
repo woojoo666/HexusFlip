@@ -31,7 +31,7 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   const matches = matchFunc(descriptors1, descriptors2);
 
   // only keep good matches
-  const bestN = 120;
+  const bestN = 80;
   const bestMatches = matches.sort(
     (match1, match2) => match1.distance - match2.distance
   ).slice(0, bestN);
@@ -62,14 +62,14 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   console.log("["+mat.map(r => "["+r.join(",")+"]").join(",\n")+"]");
   homographyMatrix = mat;
 
-  // const srcCorners = new cv.Mat([
-  //     [0, 0],
-  //     [img1.cols, 0],
-  //     [img1.cols, img1.rows],
-  //     [0, img1.rows]
-  //   ], cv.CV_32F);
-  //const dstCoordinates = srcCorners.perspectiveTransform(homography)
-  //console.log(dstCoordinates);
+  // const srcCorners = new cv.Mat([[
+  //     [0, 0, 1],
+  //     [img1.cols, 0, 1],
+  //     [img1.cols, img1.rows, 1],
+  //     [0, img1.rows, 1]
+  //   ]], cv.CV_32F3C);
+  // const dstCoordinates = srcCorners.perspectiveTransform(homography)
+  // console.log(dstCoordinates);
 
   return cv.drawMatches(
     img1,
@@ -80,8 +80,8 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('shoppingbag.jpg');
-const img2 = cv.imread('capture.jpg');
+const img1 = cv.imread('capture 2.jpg');
+const img2 = cv.imread('shoppingbag.jpg');
 
 // check if opencv compiled with extra modules and nonfree
 if (cv.xmodules.xfeatures2d) {
@@ -112,15 +112,24 @@ const srcCorners = [
 const dstCoords = perspectiveTransform(homographyMatrix, srcCorners);
 const xOffset = img1.cols; // because the query image is on the left side, drawings on the right side need to be offset
 const dstPoints = dstCoords.map(coord => new cv.Point(coord[0]+xOffset, coord[1]));
-const lineprops = { thickness: 5, color: new cv.Vec(0,255,255) };
+const borderLine = { thickness: 5, color: new cv.Vec(0,255,255) };
 
-orbMatchesImg.drawLine(dstPoints[0], dstPoints[1], lineprops);
-orbMatchesImg.drawLine(dstPoints[1], dstPoints[2], lineprops);
-orbMatchesImg.drawLine(dstPoints[2], dstPoints[3], lineprops);
-orbMatchesImg.drawLine(dstPoints[3], dstPoints[0], lineprops);
+orbMatchesImg.drawLine(dstPoints[0], dstPoints[1], borderLine);
+orbMatchesImg.drawLine(dstPoints[1], dstPoints[2], borderLine);
+orbMatchesImg.drawLine(dstPoints[2], dstPoints[3], borderLine);
+orbMatchesImg.drawLine(dstPoints[3], dstPoints[0], borderLine);
 
 const srcCenter = [img1.cols/2, img1.rows/2];
 const dstCenter = perspectiveTransform(homographyMatrix, [srcCenter])[0];
+const centerLine = { thickness: 10, color: new cv.Vec(255,255,0) };
+
+//draw vector from origin towards border center, which is the camera pose estimate (assuming no tilt)
+orbMatchesImg.drawLine(new cv.Point(img2.cols/2+xOffset, img2.rows/2),
+  new cv.Point(dstCenter[0]+xOffset, dstCenter[1]), centerLine);
+orbMatchesImg.drawLine(new cv.Point(dstCenter[0]+xOffset-50, dstCenter[1]-50),
+  new cv.Point(dstCenter[0]+xOffset+50, dstCenter[1]+50), borderLine);
+orbMatchesImg.drawLine(new cv.Point(dstCenter[0]+xOffset-50, dstCenter[1]+50),
+  new cv.Point(dstCenter[0]+xOffset+50, dstCenter[1]-50), borderLine);
 
 const points3d = [srcCenter, ...srcCorners].map(p => new cv.Point(p[0], p[1], 1));
 const points2d = [dstCenter, ...dstCoords].map(p => new cv.Point(p[0], p[1]));
@@ -132,5 +141,5 @@ const cameraMat = new cv.Mat([
   ], cv.CV_32F);
 console.log(cv.solvePnP(points3d, points2d, cameraMat, []));
 
-cv.imwrite('ORBmatches.png', orbMatchesImg);
+cv.imwrite('ORBmatches inverted.png', orbMatchesImg);
 
