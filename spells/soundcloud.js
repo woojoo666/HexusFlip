@@ -1,5 +1,6 @@
 console.log("hello soundcloud");
 
 setTimeout(() => {
-	$('.playButton').first().click()
+	console.log($('.playButton').first());
+	$('.playButton').first()[0].click()
 }, 2000);
