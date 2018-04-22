@@ -80,7 +80,7 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('public/straw-hats-cropped.jpg');
+const img1 = cv.imread('public/camera-pose-estimation/0 0 2 agb 30 0 0.png');
 const img2 = cv.imread('public/straw-hats.jpg');
 
 // check if opencv compiled with extra modules and nonfree

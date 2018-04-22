@@ -1,0 +1,30 @@
+rvector and tvector for different camera setups
+
+-0.2, 0.35, 1.95:
+  rvec: z: 0, y: 0, x: 0,
+  tvec: z: 500, y: -252, x: -202.5
+
+0, 0, 2:
+  rvec: z: 0, y: 0, x: 0
+  tvec: z: 194.35494579307343,y: -17.1616582800483,x: -6.30158558313162
+
+0.3, 0, 2:
+  rvec: z: 0, y: 0, x: 0
+  tvec: z: 200.35872846718715, y: -9.013205337105935, x: 63.6498394753072
+
+0, 0.3, 2:
+  rvec: z: 0, y: 0, x: 0
+  tvec: z: 194.41292206826512, y: -90.54541029481007, x: -5.854778051077514
+
+0, 0, 1.7:
+  rvec: z: 0, y: 0, x: 0
+  tvec: z: 205.4863922317159, y: -12.34866151494317, x: -0.6957372896435761
+
+
+notice that, with no rotation, the z stays relatively constant while changes in the x and y coordinates of the camera match changes in the x and y coordinates of the tvector
+
+0, 0, 2 agb 30 0 0:
+  rvec: z: -0.55, y: 0, x: 0 },
+  tvec: z: 210.65356548186114, y: 87.23541778207688, x: -86.8730614148453
+
+compare this with the results for (0, 0, 2). The tvector should be the same, but it has drastically changed.
