@@ -6,8 +6,13 @@ script.
 
 	let switchCamera; // function for switching camera
 
+	// use "window.location.href" so it doesn't matter if you use localhost or the ip address to access the server
+	var socket = io.connect(window.location.href, {secure: true});
+
 	navigator.mediaDevices.enumerateDevices().then(function (devices) {
 		cameraDevices = devices.filter(device => device.kind == 'videoinput');
+
+		socket.emit('cameraDevices', cameraDevices);
 
 		let deviceIndex = 0;
 		let videoSource = cameraDevices[deviceIndex].deviceId;
@@ -28,8 +33,6 @@ script.
 
 		startStream();
 	});
-
-	var socket = io.connect('https://localhost', {secure: true});
 	socket.on('news', function (data) {
 		console.log(data);
 		socket.emit('my other event', { my: 'data' });

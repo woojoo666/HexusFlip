@@ -28,6 +28,9 @@ io.on('connection', function (socket) {
 	socket.on('my other event', function (data) {
 		console.log(data);
 	});
+	socket.on('cameraDevices', function (data) {
+		console.log(data);
+	})
 });
 
 server.listen(443, '0.0.0.0')
