@@ -1,5 +1,21 @@
 const cv = require('opencv4nodejs');
 
+const perspectiveTransform = (homography, points2d) => {
+  out = [];
+  for (let p = 0; p < points2d.length; p++) {
+    point = points2d[p];
+    point.push(1);
+    outp = [0, 0];
+    for (var r = 0; r < 2; r++) {
+      for (var c = 0; c < 3; c++) {
+        outp[r] += homography[r][c]*point[c];
+      }
+    }
+    out.push(outp);
+  }
+  return out;
+}
+
 const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   // detect keypoints
   const keyPoints1 = detector.detect(img1);
@@ -43,6 +59,7 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   //print homography matrix
   console.log("["+mat.map(r => "["+r.join(",")+"]").join(",\n")+"]");
 
+  console.log(perspectiveTransform(mat, [[0,0]]));
   // const srcCorners = new cv.Mat([
   //     [0, 0],
   //     [img1.cols, 0],
