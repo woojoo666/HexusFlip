@@ -31,7 +31,7 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   const matches = matchFunc(descriptors1, descriptors2);
 
   // only keep good matches
-  const bestN = 40;
+  const bestN = 12;
   const bestMatches = matches.sort(
     (match1, match2) => match1.distance - match2.distance
   ).slice(0, bestN);
@@ -80,8 +80,8 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('public/corner-detection/abg -5 10 20.png');
-const img2 = cv.imread('public/straw-hats.jpg');
+const img1 = cv.imread('s1.jpg');
+const img2 = cv.imread('s0.jpg');
 
 // check if opencv compiled with extra modules and nonfree
 if (cv.xmodules.xfeatures2d) {
