@@ -29,7 +29,11 @@ app.get('/visualizer', (req, res) => {
 	res.render('visualizer', { title: 'Camera Pose Visualizer' });
 });
 
-io.on('connection', function (socket) {
+const index_namespace = '/index';
+const visualizer_namespace = '/visualizer';
+
+io.of(index_namespace).on('connection', function (socket) {
+	console.log('index connected!!!');
 	socket.emit('news', { hello: 'world' });
 	socket.on('my other event', function (data) {
 		console.log(data);
@@ -41,6 +45,12 @@ io.on('connection', function (socket) {
 		fs.writeFile('image.jpg', new Buffer(blob, 'base64'));
 	});
 });
+
+io.of(visualizer_namespace).on('connection', function (socket) {
+	console.log('visualizer connected!!!');
+	socket.on('visualizer-ready', function () {
+	});
+})
 
 server.listen(443, '0.0.0.0')
 

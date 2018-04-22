@@ -4,8 +4,9 @@ script.
 	const canvas = document.getElementById("canvas");
 	const ctx = canvas.getContext("2d");
 
-	// use "window.location.href" so it doesn't matter if you use localhost or the ip address to access the server
-	var socket = io.connect(window.location.href, {secure: true});
+	const socket_namespace = '/visualizer';
+
+	var socket = io.connect(socket_namespace, {secure: true});
 
 	const center = { x: canvas.width/2, y: canvas.height/2 }
 	var point = (x, y) => [ x+center.x, y+center.y ];
@@ -31,3 +32,5 @@ script.
 	});
 
 	redraw(0, 0);
+
+	socket.emit('visualizer-ready');

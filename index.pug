@@ -6,8 +6,9 @@ script(src="https://code.jquery.com/jquery-3.1.1.min.js")
 script.
 	const player = document.getElementById('player');
 
-	// use "window.location.href" so it doesn't matter if you use localhost or the ip address to access the server
-	var socket = io.connect(window.location.href, {secure: true});
+	const socket_namespace = '/index';
+
+	var socket = io.connect(socket_namespace, {secure: true});
 
 	function capture () {};
 
