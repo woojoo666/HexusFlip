@@ -18,13 +18,41 @@ script.
 
 		socket.emit('cameraDevices', backCamera);
 
+		const constraints = {
+		};
+
 		function startStream () {
+			var track;
+			var imageCapture;
 			navigator.mediaDevices.getUserMedia({ video: {deviceId: {exact: backCamera.deviceId} } })
 				.then((stream) => {
 					player.srcObject = stream;
-					var track = stream.getVideoTracks()[0];
-					var imageCapture = new ImageCapture(track);
+					track = stream.getVideoTracks()[0];
+					return track.applyConstraints(constraints)
+				})
+				.then(() => {
+					imageCapture = new ImageCapture(track);
 					capture = () => imageCapture.takePhoto().then(blob => socket.emit('capture', blob));
+
+					return imageCapture.getPhotoCapabilities();
+				})
+				.then(photoCapabilities => {
+					const settings = imageCapture.track.getSettings();
+					console.log("Width:")
+					console.log("min: " + photoCapabilities.imageWidth.min);
+					console.log("max: " + photoCapabilities.imageWidth.max);
+					console.log("step: " + photoCapabilities.imageWidth.step);
+
+					console.log("Height:")
+					console.log("min: " + photoCapabilities.imageHeight.min);
+					console.log("max: " + photoCapabilities.imageHeight.max);
+					console.log("step: " + photoCapabilities.imageHeight.step);
+
+					return imageCapture.getPhotoSettings();
+				})
+				.then(photoSettings => {
+				  	console.log("image width: " + photoSettings.imageWidth);
+				  	console.log("image height: " + photoSettings.imageHeight);
 				});
 		}
 
