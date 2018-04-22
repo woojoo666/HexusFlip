@@ -79,7 +79,7 @@ const estimateCameraPose = ( img1url, draw ) => {
 		);
 	}
 
-	return dstCenter;
+	return { x: dstCenter[0], y: dstCenter[1] };
 };
 
 const drawMatches = function (img1, img2, keyPoints1, keyPoints2, bestMatches, homographyMatrix) {

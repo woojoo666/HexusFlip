@@ -41,18 +41,19 @@ io.of(index_namespace).on('connection', function (socket) {
 	socket.on('cameraDevices', function (data) {
 		console.log(data);
 	});
-	socket.on('capture', function (blob) {
-		fs.writeFile('image.jpg', new Buffer(blob, 'base64'));
+	socket.on('captured', function (blob) {
+		fs.writeFileSync('image.jpg', new Buffer(blob, 'base64'));
+		// var cameraPose = vision.estimateCameraPose('image.jpg');
+		// console.log(cameraPose);
+		// io.emit('cameraPose', cameraPose);
 	});
 });
 
 io.of(visualizer_namespace).on('connection', function (socket) {
 	console.log('visualizer connected!!!');
 	socket.on('visualizer-ready', function () {
+		io.of(index_namespace).emit('takeCapture');
 	});
 })
 
 server.listen(443, '0.0.0.0')
-
-var cameraPose = vision.estimateCameraPose('public/camera-pose-estimate client-resized/capture2.jpg', true);
-console.log(cameraPose);
