@@ -24,11 +24,10 @@ img {
 </head>
 
 <body>
-Comparison between the blanket taken at a certain roll/pitch/yaw, and then simulating that roll/pitch/yaw in WebGL
-<canvas id="gl-canvas" width="300" height="400">
+<canvas id="gl-canvas" width="501" height="596">
 Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
-<img src="alpha_0.525 beta_16.124 gamma_-13.307.jpg"/>
+<img src="straw-hats-cropped.jpg" style="width: 501px; height: 596px"/>
 <div id="generated">
 </div>
 <script>
@@ -50,12 +49,12 @@ window.onload = function init()
 	// var alpha = 0.5259472008058409;
 	// var beta = 16.12427933099772;
 	// var gamma = -13.307355484480873;
-	var alpha = -5;
-	var beta = 10;
-	var gamma = 20;
+	var alpha = 0;
+	var beta = 0;
+	var gamma = 0;
 
 	// var cameraOffset = new SimpleCartesia().setParent(root).move(vec3(-0.4,-0.6,1.8));
-	var cameraOffset = new SimpleCartesia().setParent(root).move(vec3(0.5,-0.3,1.8));
+	var cameraOffset = new SimpleCartesia().setParent(root).move(vec3(-0.2,0.35,1.95));
 	//start with camera moved back 20 and up 10
 	var cameraABG = new CustomCartesia().setParent(cameraOffset).setTransform(
 		new Mat4()
