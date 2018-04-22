@@ -34,10 +34,6 @@ const visualizer_namespace = '/visualizer';
 
 io.of(index_namespace).on('connection', function (socket) {
 	console.log('index connected!!!');
-	socket.emit('news', { hello: 'world' });
-	socket.on('my other event', function (data) {
-		console.log(data);
-	});
 	socket.on('cameraDevices', function (data) {
 		console.log(data);
 	});
