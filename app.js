@@ -2,6 +2,7 @@ let express = require('express')
 let selfSignedHttps = require('self-signed-https')
 let logger = require('morgan');
 let bodyParser = require('body-parser');
+let fs = require('fs');
 
 let app = express();
 let server = selfSignedHttps(app);
@@ -30,7 +31,10 @@ io.on('connection', function (socket) {
 	});
 	socket.on('cameraDevices', function (data) {
 		console.log(data);
-	})
+	});
+	socket.on('capture', function (blob) {
+		fs.writeFile('image.jpg', new Buffer(blob, 'base64'));
+	});
 });
 
 server.listen(443, '0.0.0.0')

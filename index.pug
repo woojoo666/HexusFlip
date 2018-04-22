@@ -1,5 +1,4 @@
 video(id='player' controls autoplay)
-img(id='capturedImg')
 button(onclick='capture();') take photo
 script(src="/socket.io/socket.io.js")
 script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js")
@@ -25,7 +24,7 @@ script.
 					player.srcObject = stream;
 					var track = stream.getVideoTracks()[0];
 					var imageCapture = new ImageCapture(track);
-					capture = () => imageCapture.takePhoto().then(blob => $('#capturedImg')[0].src = URL.createObjectURL(blob));
+					capture = () => imageCapture.takePhoto().then(blob => socket.emit('capture', blob));
 				});
 		}
 
