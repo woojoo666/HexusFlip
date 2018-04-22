@@ -43,9 +43,9 @@ io.of(index_namespace).on('connection', function (socket) {
 	});
 	socket.on('captured', function (blob) {
 		fs.writeFileSync('image.jpg', new Buffer(blob, 'base64'));
-		// var cameraPose = vision.estimateCameraPose('image.jpg');
-		// console.log(cameraPose);
-		// io.emit('cameraPose', cameraPose);
+		var cameraPose = vision.estimateCameraPose('image.jpg');
+		console.log(cameraPose);
+		io.of(visualizer_namespace).emit('cameraPose', cameraPose);
 	});
 });
 
