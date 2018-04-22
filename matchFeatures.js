@@ -5,13 +5,13 @@ const perspectiveTransform = (homography, points2d) => {
   for (let p = 0; p < points2d.length; p++) {
     point = points2d[p];
     point.push(1);
-    outp = [0, 0];
-    for (var r = 0; r < 2; r++) {
+    outp = [0, 0, 0];
+    for (var r = 0; r < 3; r++) {
       for (var c = 0; c < 3; c++) {
         outp[r] += homography[r][c]*point[c];
       }
     }
-    out.push(outp);
+    out.push([outp[0]/outp[2], outp[1]/outp[2]]);
   }
   return out;
 }
@@ -80,7 +80,7 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('public/straw-hats-cropped.jpg');
+const img1 = cv.imread('public/alpha_0.525 beta_16.124 gamma_-13.307 - flipped.jpg');
 const img2 = cv.imread('public/straw-hats.jpg');
 
 // check if opencv compiled with extra modules and nonfree
