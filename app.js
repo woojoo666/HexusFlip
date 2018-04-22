@@ -58,7 +58,7 @@ io.of(visualizer_namespace).on('connection', function (socket) {
 });
 
 io.of(spells_namespace).on('connection', function (socket) {
-	console.log('soundcloud connected!!!');
+	console.log('spells connected!!!');
 });
 
 server.listen(443, '0.0.0.0')
