@@ -25,6 +25,10 @@ app.get('/', (req, res) => {
 	res.render('index', { title: 'Camera Web App' });
 });
 
+app.get('/visualizer', (req, res) => {
+	res.render('visualizer', { title: 'Camera Pose Visualizer' });
+});
+
 io.on('connection', function (socket) {
 	socket.emit('news', { hello: 'world' });
 	socket.on('my other event', function (data) {

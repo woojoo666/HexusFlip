@@ -1,0 +1,33 @@
+script(src="/socket.io/socket.io.js")
+canvas(id="canvas" width="1000" height="1000")
+script.
+	const canvas = document.getElementById("canvas");
+	const ctx = canvas.getContext("2d");
+
+	// use "window.location.href" so it doesn't matter if you use localhost or the ip address to access the server
+	var socket = io.connect(window.location.href, {secure: true});
+
+	const center = { x: canvas.width/2, y: canvas.height/2 }
+	var point = (x, y) => [ x+center.x, y+center.y ];
+
+	function redraw(x, y) {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		// draw origin
+		ctx.moveTo(...point(-20, 0));
+		ctx.lineTo(...point(20, 0));
+		ctx.stroke();
+		ctx.moveTo(...point(0, -20));
+		ctx.lineTo(...point(0, 20));
+		ctx.stroke();
+
+		// draw camera pose
+		ctx.fillStyle = "#FF0000";
+		ctx.fillRect(...point(x, y), 10, 10);
+	}
+
+	socket.on('cameraPose', function (cameraPose) {
+		redraw(cameraPose.x, cameraPose.y);
+	});
+
+	redraw(0, 0);
