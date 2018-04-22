@@ -11,4 +11,9 @@ $(document).ready(function() { //document.body.addEventListener('body',fn) doesn
     if(/soundcloud/.test(window.location.href)) {
         injectExtensionScript('soundcloud.js');
     }
+
+    chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+        if (message.command) console.log(message);
+        window.postMessage(message, '*');
+    });
 });
