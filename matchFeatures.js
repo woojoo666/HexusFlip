@@ -80,7 +80,7 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('public/corner-detection/gamma30.png');
+const img1 = cv.imread('public/corner-detection/tilted.jpg');
 const img2 = cv.imread('public/straw-hats.jpg');
 
 // check if opencv compiled with extra modules and nonfree
