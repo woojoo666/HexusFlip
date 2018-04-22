@@ -17,11 +17,19 @@ video(id='player' controls autoplay)
 	button(onclick='sendCommand("soundcloud", "next");') next
 	button(onclick='sendCommand("soundcloud", "prev");') prev
 .remoteOverlay.youtube
+	h1 Youtube
 	button(onclick='sendCommand("youtube", "play/pause");') play/pause
 .remoteOverlay.alarm
 	h1 Alarm
 	input(id="alarmInput" type="time")
 	button(onclick='sendCommand("alarm", "setAlarm:" + $("#alarmInput").val() )') set alarm
+.remoteOverlay.presentation
+	h1 Presentation
+	button(onclick='sendCommand("presentation", "next");') next
+	button(onclick='sendCommand("presentation", "prev");') prev
+.remoteOverlay.light
+	h1 Light
+	button(onclick='sendCommand("light", "on/off");') on/off
 script(src="/socket.io/socket.io.js")
 script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js")
 script(src="https://code.jquery.com/jquery-3.1.1.min.js")
