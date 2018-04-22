@@ -80,7 +80,7 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
   );
 };
 
-const img1 = cv.imread('capture 2.jpg');
+const img1 = cv.imread('public/camera-pose-estimate/capture4.jpg');
 const img2 = cv.imread('shoppingbag.jpg');
 
 // check if opencv compiled with extra modules and nonfree
@@ -141,5 +141,5 @@ const cameraMat = new cv.Mat([
   ], cv.CV_32F);
 console.log(cv.solvePnP(points3d, points2d, cameraMat, []));
 
-cv.imwrite('ORBmatches inverted.png', orbMatchesImg);
+cv.imwrite('public/camera-pose-estimate/matches4.png', orbMatchesImg);
 
