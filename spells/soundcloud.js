@@ -10,6 +10,6 @@ setTimeout(() => {
 
 		if (message.command == 'play/pause') $('.playControls__play').first()[0].click()
 		if (message.command == 'prev') $('.playControls__prev').first()[0].click();
-		if (message.command == 'prev') $('.playControls__next').first()[0].click();
+		if (message.command == 'next') $('.playControls__next').first()[0].click();
 	})
 }, 2000);

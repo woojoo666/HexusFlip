@@ -45,6 +45,7 @@ io.of(index_namespace).on('connection', function (socket) {
 		var cameraPose = vision.estimateCameraPose('image.jpg');
 		console.log(cameraPose);
 		var activeTotem = totems.getActiveTotem(cameraPose);
+		socket.emit('activeTotem', activeTotem);
 		io.of(visualizer_namespace).emit('cameraPose', { cameraPose, activeTotem });
 	});
 	socket.on('initiateCommand', function (data) {
