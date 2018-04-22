@@ -3,6 +3,7 @@ let selfSignedHttps = require('self-signed-https')
 let logger = require('morgan');
 let bodyParser = require('body-parser');
 let fs = require('fs');
+let vision = require('./vision.js');
 
 let app = express();
 let server = selfSignedHttps(app);
@@ -38,3 +39,6 @@ io.on('connection', function (socket) {
 });
 
 server.listen(443, '0.0.0.0')
+
+var cameraPose = vision.estimateCameraPose('public/camera-pose-estimate client-resized/capture2.jpg', true);
+console.log(cameraPose);

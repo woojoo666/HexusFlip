@@ -21,7 +21,9 @@ const perspectiveTransform = (homography, points2d) => {
 }
 
 // if draw is true, it will save an image of the feature matches and border detection
-const estimateCameraPose = ( img1, draw ) => {
+const estimateCameraPose = ( img1url, draw ) => {
+
+	const img1 = cv.imread(img1url);
 
 	var detector = new cv.ORBDetector();
 
@@ -53,20 +55,15 @@ const estimateCameraPose = ( img1, draw ) => {
 
 	const homography = cv.findHomography(matchedPoints1, matchedPoints2).homography;
 
-	console.log(homography);
-
 	// convert homography matrix to a js matrix
-	var mat = [];
+	var homographyMatrix = [];
 	for (var r = 0; r < homography.rows; r++) {
 		var row = [];
 		for (var c = 0; c < homography.cols; c++) {
 			row.push(homography.at(r,c));
 		}
-		mat.push(row);
+		homographyMatrix.push(row);
 	}
-	//print homography matrix
-	console.log("["+mat.map(r => "["+r.join(",")+"]").join(",\n")+"]");
-	var homographyMatrix = mat;
 
 	const srcCenter = [img1.cols/2, img1.rows/2];
 	const dstCenter = perspectiveTransform(homographyMatrix, [srcCenter])[0];
@@ -81,6 +78,8 @@ const estimateCameraPose = ( img1, draw ) => {
 			homographyMatrix
 		);
 	}
+
+	return dstCenter;
 };
 
 const drawMatches = function (img1, img2, keyPoints1, keyPoints2, bestMatches, homographyMatrix) {
@@ -121,8 +120,9 @@ const drawMatches = function (img1, img2, keyPoints1, keyPoints2, bestMatches, h
 	orbMatchesImg.drawLine(new cv.Point(dstCenter[0]+xOffset-50, dstCenter[1]+50),
 		new cv.Point(dstCenter[0]+xOffset+50, dstCenter[1]-50), borderLine);
 
-	cv.imwrite('testvision.png', orbMatchesImg);
-
+	cv.imwrite('vision-matches.png', orbMatchesImg);
 }
 
-estimateCameraPose(cv.imread('public/camera-pose-estimate client-resized/capture2.jpg'), true);
+module.exports = {
+	estimateCameraPose
+}
