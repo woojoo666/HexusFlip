@@ -11,6 +11,8 @@ script.
 	const center = { x: canvas.width/2, y: canvas.height/2 }
 	var point = (x, y) => [ x+center.x, y+center.y ];
 
+	var totems = [];
+
 	function redraw(cameraPose) {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -33,12 +35,21 @@ script.
 		ctx.moveTo(...point(cameraPose.center.x, cameraPose.center.y));
 		ctx.lineTo(...point(cameraPose.north.x, cameraPose.north.y));
 		ctx.stroke();
+
+		totems.forEach((totem) => {
+			ctx.fillStyle = "green";
+			ctx.fillRect(...point(totem.x, totem.y), 5, 5);
+		});
 	}
 
 	socket.on('cameraPose', function (cameraPose) {
 		console.log('cameraPose: [' + cameraPose.center.x + ', ' + cameraPose.center.y + ']');
 		redraw(cameraPose);
 		setTimeout(() => socket.emit('visualizer-ready'), 200);
+	});
+
+	socket.on('totems', function (data) {
+		totems = data;
 	});
 
 	socket.emit('visualizer-ready');

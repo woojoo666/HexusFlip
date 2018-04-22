@@ -4,6 +4,7 @@ let logger = require('morgan');
 let bodyParser = require('body-parser');
 let fs = require('fs');
 let vision = require('./vision.js');
+let totems = require('./totems.js');
 
 let app = express();
 let server = selfSignedHttps(app);
@@ -52,6 +53,7 @@ io.of(index_namespace).on('connection', function (socket) {
 
 io.of(visualizer_namespace).on('connection', function (socket) {
 	console.log('visualizer connected!!!');
+	socket.emit('totems', totems.totems);
 	socket.on('visualizer-ready', function () {
 		io.of(index_namespace).emit('takeCapture');
 	});
