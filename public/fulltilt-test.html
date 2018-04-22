@@ -47,11 +47,15 @@ window.onload = function init()
 	glwrapper = new WebGLWrapper( "gl-canvas", TextureShader );
 
 	// hardcoded skew values
-	var alpha = 0.5259472008058409;
-	var beta = 16.12427933099772;
-	var gamma = -13.307355484480873;
+	// var alpha = 0.5259472008058409;
+	// var beta = 16.12427933099772;
+	// var gamma = -13.307355484480873;
+	var alpha = 0;
+	var beta = 0;
+	var gamma = 30;
 
-	var cameraOffset = new SimpleCartesia().setParent(root).move(vec3(-0.4,-0.6,1.8));
+	// var cameraOffset = new SimpleCartesia().setParent(root).move(vec3(-0.4,-0.6,1.8));
+	var cameraOffset = new SimpleCartesia().setParent(root).move(vec3(1,0,1.5));
 	//start with camera moved back 20 and up 10
 	var cameraABG = new CustomCartesia().setParent(cameraOffset).setTransform(
 		new Mat4()
@@ -65,7 +69,7 @@ window.onload = function init()
 	image1.onload = function() { 
 		var texture = glwrapper.createTexture( image1 , gl.NEAREST, gl.NEAREST, gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE );
 		console.log(image1.naturalHeight*1.0/image1.naturalWidth);
-		floorRect = new CustomCartesia().setParent(root).setTransform(new Mat4().scale(vec3(-1, image1.naturalHeight*1.0/image1.naturalWidth),1));
+		floorRect = new CustomCartesia().setParent(root).setTransform(new Mat4().scale(vec3(1, image1.naturalHeight*1.0/image1.naturalWidth),1));
 		mfloor = new TextureSquare(texture).setParent(floorRect);
 	};
 	image1.src = "straw-hats.jpg";
