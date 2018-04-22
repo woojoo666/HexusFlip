@@ -27,7 +27,18 @@ const matchFeatures = ({ img1, img2, detector, matchFunc }) => {
     matchedPoints2.push( keyPoints2[ bestMatches[i].trainIdx ].point );
   }
 
-  console.log(cv.findHomography(matchedPoints1, matchedPoints2));
+  const homography = cv.findHomography(matchedPoints1, matchedPoints2).homography;
+
+  console.log(homography);
+
+  const srcCorners = new cv.Mat([
+      [0, 0],
+      [img1.cols, 0],
+      [img1.cols, img1.rows],
+      [0, img1.rows]
+    ], cv.CV_32F);
+  const dstCoordinates = srcCorners.perspectiveTransform(homography)
+  console.log(dstCoordinates);
 
   return cv.drawMatches(
     img1,
